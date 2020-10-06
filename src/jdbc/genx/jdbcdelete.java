@@ -1,4 +1,4 @@
-//step 4 insertmany
+//step 4 delete
 package jdbc.genx;
 
 import java.sql.Connection;
@@ -6,12 +6,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class jdbcinsertmany {
+public class jdbcdelete {
 public static void main(String[] args) throws SQLException {
 		
 		Connection con=null;
 		Statement stmt=null;
-		String qry = "insert into genx.salary values(1,'Siddharth',40000,'siddharth@gen-xt.com'),(2,'shipra',30000,'sipra@gen-xt.com')";
+		String qry = "delete from  genx.salary where Id=4";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			
@@ -25,7 +25,7 @@ public static void main(String[] args) throws SQLException {
 			System.out.println("Platform Created");
 			
 			stmt.executeUpdate(qry);
-			System.out.println("Data Inserted");
+			System.out.println("Data deleted");
 			
 		}catch(ClassNotFoundException|SQLException e)
 		{
@@ -59,4 +59,6 @@ public static void main(String[] args) throws SQLException {
 		}
 		
 	}
+
+
 }

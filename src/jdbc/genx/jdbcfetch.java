@@ -1,17 +1,20 @@
-//step 4 insertmany
+//step 5 fetch
 package jdbc.genx;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class jdbcinsertmany {
+public class jdbcfetch {
 public static void main(String[] args) throws SQLException {
 		
 		Connection con=null;
-		Statement stmt=null;
-		String qry = "insert into genx.salary values(1,'Siddharth',40000,'siddharth@gen-xt.com'),(2,'shipra',30000,'sipra@gen-xt.com')";
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		
+		String qry = "select * from genx.salary";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			
@@ -21,11 +24,21 @@ public static void main(String[] args) throws SQLException {
 			
 			System.out.println("Connetion Establish with db server");
 			
-			stmt=con.createStatement();
-			System.out.println("Platform Created");
+			pstmt=con.prepareStatement(qry);
 			
-			stmt.executeUpdate(qry);
-			System.out.println("Data Inserted");
+			rs=pstmt.executeQuery();
+			
+			while(rs.next())
+			{
+				int id=rs.getInt("Id");
+				String EmployeesName = rs.getString(2);
+				int salary = rs.getInt(3);
+				String EmailId=rs.getString(4);
+				
+				System.out.println(id+ " " +EmployeesName+" " +salary+ " "+ EmailId);
+			}
+			
+			
 			
 		}catch(ClassNotFoundException|SQLException e)
 		{
@@ -34,11 +47,21 @@ public static void main(String[] args) throws SQLException {
 		
 		finally
 		{
-			if(stmt!=null)
+			if(rs!=null)
 			{
 				try {
-					stmt.close();
-					System.out.println("Closed All Resources");
+					rs.close();
+				}catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+				
+			}
+			if(pstmt!=null)
+			{
+				try {
+					pstmt.close();
+				
 				}catch(SQLException e)
 				{
 					e.printStackTrace();
@@ -49,14 +72,16 @@ public static void main(String[] args) throws SQLException {
 			{
 				try {
 					con.close();
-					System.out.println("Closed All Resources");
 				}catch(SQLException e)
 				{
 					e.printStackTrace();
 				}
 				
 			}
+			System.out.println("Closed All Resources");
 		}
 		
 	}
+
+
 }
